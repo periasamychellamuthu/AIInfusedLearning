@@ -22,4 +22,4 @@ def getGeminiModel():
     return "gemini-3.6-flash"
 
 def getGroqModel():
-    return "llama-3.3-70b-versatile"
+    return "openai/gpt-oss-120b"
