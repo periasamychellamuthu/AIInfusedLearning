@@ -1,6 +1,10 @@
 /.idea/
-/.venv/
 /.vscode/
 /chroma_db/
-/Class1/.gradio/
-/.env
+.env
+__pycache__/
+*.pyc
+.gradio/
+eta_model.pkl
+.venv/
+*.pkg

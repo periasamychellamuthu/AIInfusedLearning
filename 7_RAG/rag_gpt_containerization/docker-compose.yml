@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    dns:
+      - 10.56.191.54        # machine DNS
+      - 8.8.8.8             # If machine dns fails goes to public dns (tries second)
+    container_name: personalgpt-app
+    ports:
+      - "8868:8000"          # your Mac's 8000 -> app's 8000
+    env_file: .env           # secrets injected at RUNTIME, never baked into the image
+    environment:
+      - CHROMA_HOST=chroma   # <- the SERVICE NAME below, not an IP address
+      - CHROMA_PORT=8000     # <- chroma's INTERNAL port (not the published 8001)
+      - ANONYMIZED_TELEMETRY=False
+    depends_on:
+      - chroma
+    restart: unless-stopped  # if it does crash, Docker brings it back
+  
+  chroma:
+    image: chromadb/chroma:0.6.3
+    container_name: personalgpt-chroma
+    ports:
+      - "8869:8000"          # published only so YOU can poke it from the Mac
+    volumes:
+      - chroma_data:/chroma/chroma   # the steel dabba - data survives container death
+    environment:
+      - ANONYMIZED_TELEMETRY=False
+    restart: unless-stopped
+volumes:
+  chroma_data:
